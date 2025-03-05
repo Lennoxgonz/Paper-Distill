@@ -7,9 +7,9 @@ from nltk.tokenize import sent_tokenize
 
 # Download nltk data (if needed)
 try:
-    nltk.data.find('tokenizers/punkt')
+    nltk.data.find("tokenizers/punkt")
 except LookupError:
-    nltk.download('punkt')
+    nltk.download("punkt")
 
 client = arxiv.Client()
 
@@ -20,11 +20,13 @@ def fetch_papers(query, categories, max_results=10):
         cat_query = " OR ".join([f"cat:{cat}" for cat in categories])
         query = f"{query} AND ({cat_query})" if query else cat_query
 
-    search = arxiv.Search(query=query, max_results=max_results,
-                          sort_by=arxiv.SortCriterion.SubmittedDate)
+    search = arxiv.Search(
+        query=query, max_results=max_results, sort_by=arxiv.SortCriterion.SubmittedDate
+    )
     results = list(client.results(search))
 
     return results
+
 
 # Load model from hugging face
 
@@ -54,8 +56,9 @@ def summarize_abstract(abstract, max_length=100):
         abstract = shortened_abstract
 
     # Generate summary
-    summary = summarizer(abstract, max_length=max_length,
-                         min_length=max_length-25, do_sample=False)[0]['summary_text']
+    summary = summarizer(
+        abstract, max_length=max_length, min_length=max_length - 25, do_sample=False
+    )[0]["summary_text"]
     return summary
 
 
@@ -73,7 +76,11 @@ enable_summarization = st.sidebar.checkbox(
     "Enable Abstract Summarization", value=True)
 # How it works section in sidebar
 with st.sidebar.expander("**How it works**"):
-    st.write("**Abstract Summarization** \n\n Creates a summarized version of the paper's abstract using the facebook/bart-large-cnn model. This is a BART (Bidirectional and Auto-Regressive Transformers) based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.")
+    st.write(
+        """**Abstract Summarization** \n\n Creates a summarized version of the paper's abstract using the 
+        facebook/bart-large-cnn model. This is a BART (Bidirectional and Auto-Regressive Transformers) 
+        based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries."""
+    )
 # Handle search button click
 if st.button("Search"):
     with st.spinner("Searching for papers..."):
@@ -93,11 +100,13 @@ if st.button("Search"):
             if selected_cats:
                 cat_query = " OR ".join(
                     [f"cat:{cat}" for cat in selected_cats])
-                query_str = f"{search_query} AND ({cat_query})" if search_query else cat_query
+                query_str = (
+                    f"{search_query} AND ({cat_query})" if search_query else cat_query
+                )
             st.error(f"Query used: {query_str}")
 
 # Display results if we have papers (either from this search or a previous one)
-if 'papers' in st.session_state and st.session_state.papers:
+if "papers" in st.session_state and st.session_state.papers:
     papers = st.session_state.papers
 
     # Create expander for each paper
@@ -107,7 +116,8 @@ if 'papers' in st.session_state and st.session_state.papers:
             # Basic paper info
             st.header(paper.title)
             st.markdown(
-                f"**Authors:** *{', '.join([a.name for a in paper.authors][:3])}*")
+                f"**Authors:** *{', '.join([a.name for a in paper.authors][:3])}*"
+            )
             col1, col2 = st.columns(2)
             with col1:
                 st.markdown(
@@ -115,7 +125,8 @@ if 'papers' in st.session_state and st.session_state.papers:
             with col2:
                 st.markdown(f"**Categories:** {', '.join(paper.categories)}")
             st.markdown(
-                f"**Links:** [PDF]({paper.pdf_url}) | [arXiv]({paper.entry_id})")
+                f"**Links:** [PDF]({paper.pdf_url}) | [arXiv]({paper.entry_id})"
+            )
 
             # Abstract/Summary section
             st.markdown("---")
@@ -132,7 +143,8 @@ if 'papers' in st.session_state and st.session_state.papers:
                         if summary_key not in st.session_state:
                             with st.spinner("Generating summary..."):
                                 st.session_state[summary_key] = summarize_abstract(
-                                    paper.summary)
+                                    paper.summary
+                                )
 
                         summary = st.session_state[summary_key]
                         st.markdown(f"*{summary}*")
