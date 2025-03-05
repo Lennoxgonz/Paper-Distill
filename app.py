@@ -1,6 +1,5 @@
 import streamlit as st
 import arxiv
-import torch
 from transformers import pipeline
 import nltk
 from nltk.tokenize import sent_tokenize
@@ -29,8 +28,6 @@ def fetch_papers(query, categories, max_results=10):
 
 
 # Load model from hugging face
-
-
 @st.cache_resource
 def load_summarizer():
     return pipeline("summarization", model="facebook/bart-large-cnn")
@@ -81,6 +78,7 @@ with st.sidebar.expander("**How it works**"):
         facebook/bart-large-cnn model. This is a BART (Bidirectional and Auto-Regressive Transformers) 
         based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries."""
     )
+
 # Handle search button click
 if st.button("Search"):
     with st.spinner("Searching for papers..."):
@@ -156,3 +154,5 @@ if "papers" in st.session_state and st.session_state.papers:
                     st.markdown(paper.summary)
             else:
                 st.markdown(paper.summary)
+
+st.write("Thank you to arXiv for use of its open access interoperability.")
