@@ -7,6 +7,10 @@ if 'papers' not in st.session_state:
     st.session_state.papers = None
 if 'selected_paper' not in st.session_state:
     st.session_state.selected_paper = None
+if 'abstract_summary' not in st.session_state:
+    st.session_state.abstract_summary = None
+if 'paper_summary' not in st.session_state:
+    st.session_state.paper_summary = None
 
 # Load model from hugging face
 @st.cache_resource
