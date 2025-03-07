@@ -1,8 +1,5 @@
 import streamlit as st
 import arxiv
-from transformers import pipeline
-import nltk
-from nltk.tokenize import sent_tokenize
 
 # Initialize arxiv client
 client = arxiv.Client()
@@ -23,9 +20,11 @@ def fetch_papers(query, categories, max_results=10):
 
     return results
 
+
 def show_paper_details(paper):
     st.session_state.selected_paper = paper
     st.switch_page("paper_details_page.py")
+
 
 # Sidebar how it works section
 st.sidebar.title("How it works")
@@ -53,30 +52,35 @@ if st.button("Search"):
 
             if not papers:
                 st.warning("No papers found. Try different search terms.")
-            else:
-                st.success(f"Found {len(papers)} papers")
         except Exception as e:
             st.error(f"Error: {e}")
 
 # Create expander for each paper if papers are in session state
 if st.session_state.papers is not None:
     for i, paper in enumerate(st.session_state.papers):
-        with st.container():
-            # Basic paper info
+        with st.container(border=True):
+            # Paper title
             st.header(paper.title)
-            st.markdown(
-                f"**Authors:** *{', '.join([a.name for a in paper.authors][:3])}*"
-            )
-            col1, col2 = st.columns(2)
+
+            # Authors section
+            authors_text = ", ".join([a.name for a in paper.authors][:3])
+            if len(paper.authors) > 3:
+                authors_text += " et al."
+            st.markdown(f"**Authors:** *{authors_text}*")
+
+            # Paper metadata
+            col1, col2, col3 = st.columns([1, 1.5, 0.8])
+
             with col1:
                 st.markdown(
                     f"**Published:** {paper.published.strftime('%Y-%m-%d')}")
+
             with col2:
-                st.markdown(f"**Categories:** {', '.join(paper.categories)}")
-                if st.button("View More", key=f"view_more_{i}"):
+                categories = ", ".join(paper.categories)
+                st.markdown(f"**Categories:** {categories}")
+
+            with col3:
+                if st.button("View Details", key=f"view_{i}", use_container_width=True):
                     show_paper_details(paper)
-            st.markdown(
-                f"**Links:** [PDF]({paper.pdf_url}) | [arXiv]({paper.entry_id})"
-            )
 
 st.write("Thank you to arXiv for use of its open access interoperability.")

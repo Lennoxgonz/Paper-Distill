@@ -1,4 +1,5 @@
 import streamlit as st
+from transformers import pipeline
 import nltk
 
 # Initialize session state
@@ -10,7 +11,9 @@ if 'selected_paper' not in st.session_state:
 # Load model from hugging face
 @st.cache_resource
 def load_summarizer():
-    return pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")    
+    return pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
+
+
 summarizer = load_summarizer()
 
 # Download nltk data (if needed)
