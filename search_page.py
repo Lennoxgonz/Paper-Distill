@@ -4,7 +4,6 @@ import arxiv
 # Initialize arxiv client
 client = arxiv.Client()
 
-# Fetch papers from arxiv
 def fetch_papers(query, categories, max_results=10):
     # Add categories to query if there are any
     if categories:
@@ -26,15 +25,6 @@ def show_paper_details(paper):
     st.switch_page("paper_details_page.py")
 
 
-# Sidebar how it works section
-st.sidebar.title("How it works")
-
-with st.sidebar.expander("**Abstract Summarization**"):
-    st.write(
-        """Creates a summarized version of the paper's abstract using the 
-        facebook/bart-large-cnn model. This is a BART (Bidirectional and Auto-Regressive Transformers) 
-        based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries."""
-    )
 
 # Search interface and title
 st.title("Science Stratified")
@@ -79,8 +69,11 @@ if st.session_state.papers is not None:
                 categories = ", ".join(paper.categories)
                 st.markdown(f"**Categories:** {categories}")
 
+            # View more button linking to paper details page and clearing cache if other papers were viewed
+            # This is to prevent summarys from other papers showing on the selected paper
             with col3:
                 if st.button("View Details", key=f"view_{i}", use_container_width=True):
+                    st.session_state.abstract_summary = None
+                    st.session_state.paper_summary = None
                     show_paper_details(paper)
-
 st.write("Thank you to arXiv for use of its open access interoperability.")
