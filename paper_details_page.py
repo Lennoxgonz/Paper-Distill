@@ -145,7 +145,7 @@ with tabs[2]:
         ])
     # Handle submit button, call summarize_paper with parameters which updates session state
     if st.button("Generate Paper Summary", key="paper_summary_button"):
-        with st.spinner(f"Generating {technical_complexity} paper summary..."):
+        with st.spinner(f"Generating {technical_complexity} level paper summary..."):
             summarize_paper(length, technical_complexity)
     # If there has been a sumary generated and stored in session state, display it
     if st.session_state.paper_summary is not None:
