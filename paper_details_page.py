@@ -1,11 +1,9 @@
 import streamlit as st
 from nltk import sent_tokenize
-from app import load_summarizer
 from google import genai
 from google.genai import types
-from dotenv import load_dotenv
 import pymupdf4llm
-import os
+from utils import load_summarizer
 from search_page import categories_dict
 
 # If no paper is selected, navigate back to search page
@@ -17,9 +15,8 @@ if st.button("Back to search"):
     st.session_state.selected_paper = None
     st.rerun()
 
-# Putting selected paper into a shorter var name
+# Putting currently selected paper into a shorter var name
 paper = st.session_state.selected_paper
-
 
 def paper_pdf_to_markdown():
     # Download paper from arxiv result stored in session state
@@ -27,8 +24,6 @@ def paper_pdf_to_markdown():
     # Convert pdf to markdown text and return it
     paper_as_markdown = pymupdf4llm.to_markdown("paper.pdf")
     return paper_as_markdown
-
-
 
 # Load summarization model which is stored in streamlit cache
 summarizer = load_summarizer()
@@ -65,11 +60,13 @@ def summarize_abstract(length):
     # Save abstract summary into session state
     st.session_state.abstract_summary = summary
 
-load_dotenv()
+# Creating google gen AI client
+client = genai.Client(api_key=st.secrets["google_ai_studio_api_key"])
+
 def summarize_paper(length, complexity):
-    # System instructions and defining client
+    # System instructions
     sys_instruct = f"Condense this academic paper into a summary with a length of {length} paragraphs. Write it using vocabulary terms and explanations appropriate for a {complexity} student, but still keep it informative and professional. Do not add any formatting or introduction, simply return the requested number of paragraphs of summarized content."
-    client = genai.Client(api_key=os.environ.get("GOOGLE_STUDIO_API_KEY"))
+    
     # Calling the google genai client with system instructions and paper as markdown
     response = client.models.generate_content(
         model="gemini-2.0-flash",
@@ -81,7 +78,6 @@ def summarize_paper(length, complexity):
     st.session_state.paper_summary = response.text
 
 def answer_question(question):
-    client = genai.Client(api_key=os.environ.get("GOOGLE_STUDIO_API_KEY"))
     # Calling the google genai client with system instructions and paper as markdown
     response = client.models.generate_content(
         model="gemini-2.0-flash",

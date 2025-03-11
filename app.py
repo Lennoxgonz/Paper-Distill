@@ -13,17 +13,12 @@ if 'abstract_summary' not in st.session_state:
 if 'paper_summary' not in st.session_state:
     st.session_state.paper_summary = None
 
-# Load model from hugging face
-@st.cache_resource
-def load_summarizer():
-    return pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
-summarizer = load_summarizer()
-
 # Download nltk data (if needed)
 try:
     nltk.data.find("tokenizers/punkt")
 except LookupError:
     nltk.download("punkt")
+
 # Sidebar how it works section
 st.sidebar.title("How it works")
 
