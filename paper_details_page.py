@@ -6,6 +6,7 @@ from google.genai import types
 from dotenv import load_dotenv
 import pymupdf4llm
 import os
+from search_page import categories_dict
 
 # If no paper is selected, navigate back to search page
 if st.session_state.selected_paper is None:
@@ -67,7 +68,7 @@ def summarize_abstract(length):
 load_dotenv()
 def summarize_paper(length, complexity):
     # System instructions and defining client
-    sys_instruct = f"Condense this academic paper into a summary with a length of {length} paragraphs. Write it using vocabulary terms and explanations appropriate for a {complexity} student, but still keep it informative and professional."
+    sys_instruct = f"Condense this academic paper into a summary with a length of {length} paragraphs. Write it using vocabulary terms and explanations appropriate for a {complexity} student, but still keep it informative and professional. Do not add any formatting or introduction, simply return the requested number of paragraphs of summarized content."
     client = genai.Client(api_key=os.environ.get("GOOGLE_STUDIO_API_KEY"))
     # Calling the google genai client with system instructions and paper as markdown
     response = client.models.generate_content(
@@ -81,13 +82,15 @@ def summarize_paper(length, complexity):
 
 def answer_question(question):
     client = genai.Client(api_key=os.environ.get("GOOGLE_STUDIO_API_KEY"))
+    # Calling the google genai client with system instructions and paper as markdown
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
-            system_instruction="Your are the writer of the paper in question, answer the question based on what you know about the paper, politley decline any request not related to the paper.",
+            system_instruction="You are extremely knowledgeable about the paper in question, answer the question based on what you know about the paper, politley decline any request not related to the paper. At the end of your response suggest 3 related questions to be asked.",
         ),
         contents=[paper_pdf_to_markdown(), question]
     )
+    # Returning the response
     return response.text
 
 # Basic info about paper
@@ -101,16 +104,18 @@ with st.container():
         authors_text += " et al."
     st.markdown(f"**Authors:** *{authors_text}*")
 
-    # Other info
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown(f"**Published:** {paper.published.strftime('%Y-%m-%d')}")
-    with col2:
-        categories = ", ".join(paper.categories)
-        st.markdown(f"**Categories:** {categories}")
-    st.markdown(
-        f"**Links:** [PDF]({paper.pdf_url}) | [arXiv]({paper.entry_id})"
-    )
+
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown(f"**Published:** {paper.published.strftime('%Y-%m-%d')}")
+with col2:
+    # Convert codes to display names before joining
+    display_categories = [categories_dict.get(cat, cat) for cat in paper.categories]
+    categories_display = ", ".join(display_categories)
+    st.markdown(f"**Categories:** {categories_display}")
+st.markdown(
+    f"**Links:** [PDF]({paper.pdf_url}) | [arXiv]({paper.entry_id})"
+)
 
 # Tabs for abstract and ML features
 tabs = st.tabs(["Abstract", "Abstract Summary", "Paper Summary", "Ask Questions"])
@@ -153,7 +158,7 @@ with tabs[2]:
 # Ask questions tab
 with tabs[3]:
     # Get user input for question
-    question = st.text_input("Ask a question about the paper", max_chars=500)
+    question = st.text_input("Ask a question about the paper(or ask what are good questions to ask)", max_chars=500)
     # If question is asked, call google genai client with prompt and paper as markdown
     if st.button("Ask", key="ask_button"):
         if question != "":
