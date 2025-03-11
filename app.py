@@ -44,7 +44,7 @@ with st.sidebar.expander("**Abstract Summary**"):
         """
     )
     # Button to take user to paper details page of the original BART paper
-    if st.button("Read the BART academic paper"):
+    if st.button("Read the BART paper"):
         search = arxiv.Search(id_list=["1910.13461"])
         st.session_state.selected_paper = next(search.results())
         st.switch_page("paper_details_page.py")
@@ -55,14 +55,14 @@ with st.sidebar.expander("**Paper Summary**"):
         """
         The paper summary feature summarizes the entire paper based on two user selected parameters, length and technical complexity. The summary is created using Gemini 2.0, a Large Language Model developed by Google that is accessible through the Gemini Developer API.\n\n
         The paper is downloaded as a pdf, then converted into markdown text, then passed into the model along with a prompt instructing the model to summarize the paper into a certain number of paragraphs at a certain technical complexity. \n\n
-        An API is used here rather than a model run locally like in the abstract summary feature due to the fact that academic papers can be quite long and to summarize one requires a model that can maintain coherence across thousands of tokens. Models like this end up being very large and can be impractical to run locally.\n\n
+        An API is used here rather than a model run locally like in the abstract summary feature due to the fact that scientific papers can be quite long and to summarize one requires a model that can maintain coherence across thousands of tokens. Models like this end up being very large and can be impractical to run locally.\n\n
         Gemini AI architecture excels at processing long-context tasks through specialized attention mechanisms that maintain understanding across thousands of tokens, while innovations like sliding window attention enable efficient referencing of earlier information, making it powerful for analyzing lengthy documents and complex content.
         """
     )
     # Button to take users to the Gemini 2.0 blog post
     st.link_button("Learn more about Gemini 2.0", "https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#gemini-2-0")
     # Button to take user to paper details page of the gemini 1.5 paper
-    if st.button("Read the Gemini 1.5 academic paper"):
+    if st.button("Read the Gemini 1.5 paper"):
         search = arxiv.Search(id_list=["2403.05530"])
         st.session_state.selected_paper = next(search.results())
         st.switch_page("paper_details_page.py")
@@ -77,7 +77,7 @@ with st.sidebar.expander("**Ask Questions**"):
     # Button to take users to the Gemini 2.0 blog post
     st.link_button("Learn more about Gemini 2.0", "https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#gemini-2-0")
     # Button to take user to paper details page of the gemini 1.5 paper
-    if st.button("Read the Gemini 1.5 academic paper", key="ask_questions_button"):
+    if st.button("Read the Gemini 1.5 paper", key="ask_questions_button"):
         search = arxiv.Search(id_list=["2403.05530"])
         st.session_state.selected_paper = next(search.results())
         st.switch_page("paper_details_page.py")
