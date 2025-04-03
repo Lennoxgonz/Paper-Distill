@@ -1,7 +1,9 @@
 # Paper Distill
 Search for scientific papers and get customized summarization and the ability to ask questions about the paper.
 
-**[Live Demo](https://paper-distill.streamlit.app/)**
+<a href="https://paper-distill.streamlit.app/" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge" alt="Live Demo">
+</a>
 
 ## Features
 
