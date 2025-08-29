@@ -1,16 +1,13 @@
 import streamlit as st
 import arxiv
 
-# Initialize arxiv client
 client = arxiv.Client()
 
 def fetch_papers(query, categories, max_results=10):
-    # Add categories to query if there are any
     if categories:
         cat_query = " OR ".join([f"cat:{cat}" for cat in categories])
         query = f"{query} AND ({cat_query})" if query else cat_query
 
-    # Perform API call and cache in session state
     search = arxiv.Search(
         query=query, max_results=max_results, sort_by=arxiv.SortCriterion.SubmittedDate
     )
@@ -19,21 +16,16 @@ def fetch_papers(query, categories, max_results=10):
 
     return results
 
-
 def show_paper_details(paper):
     st.session_state.selected_paper = paper
     st.switch_page("paper_details_page.py")
 
-
-
-# Search interface and title
 st.title("Paper Distill")
 st.write("Search for scientific papers and get customized summarization and the ability to ask questions about the paper.")
 
 search_query = st.text_input("Search", placeholder="Enter keywords")
-# Complete ArXiv Categories Dictionary
-# Maps category codes to user-friendly display names
 
+# Complete ArXiv Categories Dictionary
 categories_dict = {
     # Computer Science
     "cs.AI": "Artificial Intelligence",
@@ -223,19 +215,15 @@ categories_dict = {
     "stat.TH": "Statistics Theory"
 }
 
-# Use display names in the multiselect
 selected_display_names = st.multiselect("Categories", list(categories_dict.values()))
 
-# Get the actual category codes for processing
 selected_cats = []
 for display_name in selected_display_names:
-    # Find the category code for this display name
     for code, name in categories_dict.items():
         if name == display_name:
             selected_cats.append(code)
             break
 
-# Handle search button click
 if st.button("Search"):
     with st.spinner("Searching for papers..."):
         try:
@@ -246,20 +234,17 @@ if st.button("Search"):
         except Exception as e:
             st.error(f"Error: {e}")
 
-# Create expander for each paper if papers are in session state
+# Create expander for each paper if results are returned
 if st.session_state.papers is not None:
     for i, paper in enumerate(st.session_state.papers):
         with st.container(border=True):
-            # Paper title
             st.header(paper.title)
 
-            # Authors section
             authors_text = ", ".join([a.name for a in paper.authors][:3])
             if len(paper.authors) > 3:
                 authors_text += " et al."
             st.markdown(f"**Authors:** *{authors_text}*")
 
-            # Paper metadata
             col1, col2, col3 = st.columns([1, 1.5, 0.8])
 
             with col1:
@@ -267,15 +252,14 @@ if st.session_state.papers is not None:
                     f"**Published:** {paper.published.strftime('%Y-%m-%d')}")
 
             with col2:
-                # Convert codes to display names
                 display_categories = [categories_dict.get(cat, cat) for cat in paper.categories]
                 categories_display = ", ".join(display_categories)
                 st.markdown(f"**Categories:** {categories_display}")
 
-            # View more button linking to paper details page
             with col3:
                 if st.button("View Details", key=f"view_{i}", use_container_width=True):
                     st.session_state.abstract_summary = None
                     st.session_state.paper_summary = None
                     show_paper_details(paper)
+
 st.write("Thank you to arXiv for use of its open access interoperability.")

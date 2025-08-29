@@ -19,7 +19,6 @@ try:
 except LookupError:
     nltk.download("punkt")
 
-# Sidebar how it works section
 st.sidebar.title("How it works")
 
 # Explanation of the paper search
@@ -28,8 +27,8 @@ with st.sidebar.expander("**Paper Search**"):
     st.link_button("Learn more about arXiv",
                    "https://info.arxiv.org/about/index.html")
 
+# Explanation of the abstract summarization feature
 with st.sidebar.expander("**Abstract Summary**"):
-    # Explanation of the abstract summarization
     st.markdown(
         """
         The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries. \n\n
@@ -38,7 +37,6 @@ with st.sidebar.expander("**Abstract Summary**"):
         BART (Bidirectional and Auto-Regressive Transformers) architecture was developed by Facebook/Meta. It is particularly effective for text summarization tasks as bidirectional encoding and autoregressive decoding work together to understand the context of the text and generate coherent summaries.
         """
     )
-    # Button to take user to paper details page of the original BART paper
     if st.button("Read the BART paper"):
         search = arxiv.Search(id_list=["1910.13461"])
         st.session_state.selected_paper = next(search.results())
@@ -54,14 +52,13 @@ with st.sidebar.expander("**Paper Summary**"):
         Gemini AI architecture excels at processing long-context tasks through specialized attention mechanisms that maintain understanding across thousands of tokens, while innovations like sliding window attention enable efficient referencing of earlier information, making it powerful for analyzing lengthy documents and complex content.
         """
     )
-    # Button to take users to the Gemini 2.0 blog post
     st.link_button("Learn more about Gemini 2.0", "https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#gemini-2-0")
-    # Button to take user to paper details page of the gemini 1.5 paper
     if st.button("Read the Gemini 1.5 paper"):
         search = arxiv.Search(id_list=["2403.05530"])
         st.session_state.selected_paper = next(search.results())
         st.switch_page("paper_details_page.py")
 
+# Explanation of the ask questions feature
 with st.sidebar.expander("**Ask Questions**"):
     st.markdown(
         """
@@ -69,20 +66,16 @@ with st.sidebar.expander("**Ask Questions**"):
         The paper is downloaded as a pdf, converted to markdown, then passed into the model along with the question to be asked and a prompt instructing the model to answer the question based on the context of the paper.
         """
     )
-    # Button to take users to the Gemini 2.0 blog post
     st.link_button("Learn more about Gemini 2.0", "https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#gemini-2-0")
-    # Button to take user to paper details page of the gemini 1.5 paper
     if st.button("Read the Gemini 1.5 paper", key="ask_questions_button"):
         search = arxiv.Search(id_list=["2403.05530"])
         st.session_state.selected_paper = next(search.results())
         st.switch_page("paper_details_page.py")
 
 
-# Define pages
 search_page = st.Page("search_page.py")
 paper_details_page = st.Page("paper_details_page.py")
 
-# Define nav and hide it
 pg = st.navigation([search_page, paper_details_page], position="hidden")
 
 pg.run()
