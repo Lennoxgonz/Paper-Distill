@@ -5,6 +5,57 @@ Search for scientific papers and get customized summarization and the ability to
   <img src="https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge" alt="Live Demo">
 </a>
 
+## Tech Stack
+
+- **UI:** Streamlit
+- **Paper source:** arXiv API
+- **Local summarization:** Hugging Face Transformers (`sshleifer/distilbart-cnn-12-6`)
+- **Long-context summarization and Q&A:** Google Gemini API (`gemini-2.0-flash`)
+- **PDF parsing:** `pymupdf4llm`
+
+## Local Setup (Virtual Environment)
+
+The project is configured to run locally with a Python virtual environment (`.venv`) and no dev container.
+
+### 1) Create and activate a virtual environment
+
+**Windows (PowerShell):**
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+**macOS/Linux (bash/zsh):**
+
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+```
+
+### 2) Install dependencies
+
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 3) Configure Streamlit secrets
+
+Create `.streamlit/secrets.toml`:
+
+```toml
+google_ai_studio_api_key = "YOUR_API_KEY"
+```
+
+### 4) Run the app
+
+```bash
+streamlit run app.py
+```
+
+The app starts on `http://localhost:8501` by default.
+
 ## Features
 
 ### Paper Search
@@ -13,6 +64,12 @@ The paper search uses the arXiv API to search for papers based on a search query
 [Learn more about arXiv](https://info.arxiv.org/about/index.html)
 
 ### Abstract Summary
+The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
+The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
+The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
+The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
+The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
+The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
 The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
 
 The full abstract is passed into the model along with the desired summary length.
