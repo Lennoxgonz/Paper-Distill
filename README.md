@@ -65,12 +65,6 @@ The paper search uses the arXiv API to search for papers based on a search query
 
 ### Abstract Summary
 The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
-The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
-The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
-The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
-The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
-The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
-The abstract summary feature created a summarized version of the paper's abstract using a locally run instance of the `sshleifer/distilbart-cnn-12-6` model. This is a distilled version of the `facebook/bart-large-cnn` model. A BART based model which was fine-tuned on the CNN/Daily Mail dataset of news articles and their summaries.
 
 The full abstract is passed into the model along with the desired summary length.
 

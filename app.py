@@ -1,7 +1,6 @@
 import streamlit as st
-from transformers import pipeline
 import nltk
-import arxiv
+from arxiv_client import get_paper_by_id
 
 # Initialize session state
 if 'papers' not in st.session_state:
@@ -21,6 +20,16 @@ except LookupError:
 
 st.sidebar.title("How it works")
 
+
+def open_reference_paper(arxiv_id: str) -> None:
+    paper = get_paper_by_id(arxiv_id)
+    if paper is None:
+        st.error("Unable to load the selected reference paper right now.")
+        return
+
+    st.session_state.selected_paper = paper
+    st.switch_page("paper_details_page.py")
+
 # Explanation of the paper search
 with st.sidebar.expander("**Paper Search**"):
     st.markdown("The paper search uses the arXiv API to search for papers based on a search query and selected categories, \"arXiv is a free distribution service and an open-access archive for nearly 2.4 million scholarly articles in the fields of physics, mathematics, computer science, quantitative biology, quantitative finance, statistics, electrical engineering and systems science, and economics.\"")
@@ -38,9 +47,7 @@ with st.sidebar.expander("**Abstract Summary**"):
         """
     )
     if st.button("Read the BART paper"):
-        search = arxiv.Search(id_list=["1910.13461"])
-        st.session_state.selected_paper = next(search.results())
-        st.switch_page("paper_details_page.py")
+        open_reference_paper("1910.13461")
 
 # Explanation of the paper summary feature
 with st.sidebar.expander("**Paper Summary**"):
@@ -54,9 +61,7 @@ with st.sidebar.expander("**Paper Summary**"):
     )
     st.link_button("Learn more about Gemini 2.0", "https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#gemini-2-0")
     if st.button("Read the Gemini 1.5 paper"):
-        search = arxiv.Search(id_list=["2403.05530"])
-        st.session_state.selected_paper = next(search.results())
-        st.switch_page("paper_details_page.py")
+        open_reference_paper("2403.05530")
 
 # Explanation of the ask questions feature
 with st.sidebar.expander("**Ask Questions**"):
@@ -68,9 +73,7 @@ with st.sidebar.expander("**Ask Questions**"):
     )
     st.link_button("Learn more about Gemini 2.0", "https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#gemini-2-0")
     if st.button("Read the Gemini 1.5 paper", key="ask_questions_button"):
-        search = arxiv.Search(id_list=["2403.05530"])
-        st.session_state.selected_paper = next(search.results())
-        st.switch_page("paper_details_page.py")
+        open_reference_paper("2403.05530")
 
 
 search_page = st.Page("search_page.py")

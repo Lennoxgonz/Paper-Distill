@@ -50,8 +50,8 @@ pytz==2025.1
 PyYAML==6.0.2
 referencing==0.36.2
 regex==2024.11.6
-# Security note: CVE-2026-25645 is fixed in requests>=2.33.0.
-# We are temporarily pinned to 2.32.5 because arxiv currently requires requests~=2.32.0.
+# CVE-2026-25645 is fixed in requests>=2.33.0.
+# emporarily pinned to 2.32.5 because arxiv currently requires requests~=2.32.0.
 requests==2.32.5
 rpds-py==0.23.1
 rsa==4.9

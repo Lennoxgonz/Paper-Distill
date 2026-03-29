@@ -1,9 +1,10 @@
 import streamlit as st
 import arxiv
+from arxiv_client import get_arxiv_client
 
-client = arxiv.Client()
 
 def fetch_papers(query, categories, max_results=10):
+    """Fetch papers from arXiv using a shared, throttled client."""
     if categories:
         cat_query = " OR ".join([f"cat:{cat}" for cat in categories])
         query = f"{query} AND ({cat_query})" if query else cat_query
@@ -11,6 +12,7 @@ def fetch_papers(query, categories, max_results=10):
     search = arxiv.Search(
         query=query, max_results=max_results, sort_by=arxiv.SortCriterion.SubmittedDate
     )
+    client = get_arxiv_client()
     results = list(client.results(search))
     st.session_state.papers = results
 
