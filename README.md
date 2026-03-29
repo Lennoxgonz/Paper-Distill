@@ -15,13 +15,13 @@ Search for scientific papers and get customized summarization and the ability to
 
 ## Local Setup (Virtual Environment)
 
-The project is configured to run locally with a Python virtual environment (`.venv`) and no dev container.
+The project is configured to run locally with a Python virtual environment (`.venv`)
 
-### 1) Create and activate a virtual environment
+### 1 - Create and activate a virtual environment
 
 **Windows (PowerShell):**
 
-```powershell
+```bash
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
@@ -33,14 +33,17 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 2) Install dependencies
+### 2 - Install dependencies
 
 ```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 3) Configure Streamlit secrets
+`requirements.in` - direct dependencies 
+`requirements.txt`- full dependency list generated from `requirements.in`.
+
+### 3 - Configure Streamlit secrets
 
 Create `.streamlit/secrets.toml`:
 
@@ -48,13 +51,55 @@ Create `.streamlit/secrets.toml`:
 google_ai_studio_api_key = "YOUR_API_KEY"
 ```
 
-### 4) Run the app
+### 4 - Run the app
 
 ```bash
 streamlit run app.py
 ```
 
 The app starts on `http://localhost:8501` by default.
+
+## Dependency Workflow
+
+### Add or update a dependency
+
+1. Edit `requirements.in` (direct dependencies only).
+2. Rebuild the lock file:
+
+```bash
+python -m pip install pip-tools
+pip-compile requirements.in --output-file requirements.txt
+```
+
+3. Install the updated lock:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Recreate environment from scratch
+
+**Windows (PowerShell):**
+
+```bash
+deactivate
+Remove-Item -Recurse -Force .venv
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+**macOS/Linux (bash/zsh):**
+
+```bash
+deactivate
+rm -rf .venv
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
 
 ## Features
 
