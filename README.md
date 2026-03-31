@@ -10,7 +10,7 @@ Search for scientific papers and get customized summarization and the ability to
 - **UI:** Streamlit
 - **Paper source:** arXiv API
 - **Local summarization:** Hugging Face Transformers (`sshleifer/distilbart-cnn-12-6`)
-- **Long-context summarization and Q&A:** Google Gemini API (`gemini-2.0-flash`)
+- **Long-context summarization and Q&A:** Google Gemini API (`gemini-2.5-flash-lite`)
 - **PDF parsing:** `pymupdf4llm`
 
 ## Local Setup (Virtual Environment)
@@ -54,7 +54,7 @@ google_ai_studio_api_key = "YOUR_API_KEY"
 ### 4 - Run the app
 
 ```bash
-streamlit run app.py
+streamlit run src/app.py
 ```
 
 The app starts on `http://localhost:8501` by default.
@@ -120,7 +120,7 @@ BART (Bidirectional and Auto-Regressive Transformers) architecture was developed
 [Learn more about arXiv](https://arxiv.org/abs/1910.13461v1)
 
 ### Paper Summary
-The paper summary feature summarizes the entire paper based on two user selected parameters, length and technical complexity. The summary is created using Gemini 2.0, a Large Language Model developed by Google that is accessible through the Gemini Developer API.
+The paper summary feature summarizes the entire paper based on two user selected parameters, length and technical complexity. The summary is created using Gemini 2.5 Flash-Lite, a Large Language Model developed by Google that is accessible through the Gemini Developer API.
 
 The paper is downloaded as a pdf, then converted into markdown text, then passed into the model along with a prompt instructing the model to summarize the paper into a certain number of paragraphs at a certain technical complexity.
 
@@ -128,15 +128,15 @@ An API is used here rather than a model run locally like in the abstract summary
 
 Gemini AI architecture excels at processing long-context tasks through specialized attention mechanisms that maintain understanding across thousands of tokens, while innovations like sliding window attention enable efficient referencing of earlier information, making it powerful for analyzing lengthy documents and complex content.
 
-[Learn more about Gemini 2.0](https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#gemini-2-0)
+[Learn more about Gemini models](https://ai.google.dev/gemini-api/docs/models)
 
 [Read the Gemini 1.5 paper](https://arxiv.org/abs/2403.05530v5)
 
 ### Ask Questions
-The ask questions feature allows users to ask questions about the paper. This is achieved through the use of Gemini 2.0 through the Gemini developer API and works in a very similar way to the paper summary feature.
+The ask questions feature allows users to ask questions about the paper. This is achieved through the use of Gemini 2.5 Flash-Lite through the Gemini developer API and works in a very similar way to the paper summary feature.
 
 The paper is downloaded as a pdf, converted to markdown, then passed into the model along with the question to be asked and a prompt instructing the model to answer the question based on the context of the paper.
 
-[Learn more about Gemini 2.0](https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/#gemini-2-0)
+[Learn more about Gemini models](https://ai.google.dev/gemini-api/docs/models)
 
 [Read the Gemini 1.5 paper](https://arxiv.org/abs/2403.05530v5)

@@ -50,13 +50,14 @@ def summarize_abstract(length):
     st.session_state.abstract_summary = summary
 
 client = genai.Client(api_key=st.secrets["google_ai_studio_api_key"])
+GEMINI_MODEL = "gemini-2.5-flash-lite"
 
 def summarize_paper(length, complexity):
     # System instructions for gemini
     sys_instruct = f"Condense this academic paper into a summary with a length of {length} paragraphs. Write it using vocabulary terms and explanations appropriate for a {complexity} student, but still keep it informative and professional. Do not add any formatting or introduction, simply return the requested number of paragraphs of summarized content."
     
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model=GEMINI_MODEL,
         config=types.GenerateContentConfig(
             system_instruction=sys_instruct),
         contents=[paper_pdf_to_markdown()]
@@ -65,7 +66,7 @@ def summarize_paper(length, complexity):
 
 def answer_question(question):
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model=GEMINI_MODEL,
         config=types.GenerateContentConfig(
             system_instruction="You are extremely knowledgeable about the paper in question, answer the question based on what you know about the paper, politley decline any request not related to the paper. At the end of your response suggest 3 related questions to be asked.",
         ),
