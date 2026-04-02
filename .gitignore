@@ -139,6 +139,9 @@ venv.bak/
 # Streamlit secrets
 .streamlit/secrets.toml
 
+# Downloaded paper PDFs (e.g. arXiv cache written as paper.pdf)
+*.pdf
+
 # Spyder project settings
 .spyderproject
 .spyproject
