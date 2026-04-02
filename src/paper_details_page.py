@@ -3,26 +3,41 @@ from nltk import sent_tokenize
 from google import genai
 from google.genai import types
 import pymupdf4llm
-from utils import load_summarizer
-from search_page import categories_dict
+from arxiv_client import get_paper_by_id
+from categories import categories_dict
 
-if st.session_state.selected_paper is None:
+if st.session_state.get("selected_paper_id") is None:
     st.switch_page("search_page.py")
 
-if st.button("Back to search"):
-    st.session_state.selected_paper = None
-    st.rerun()
+_pid = st.session_state.selected_paper_id
+if st.session_state.get("_paper_cache_id") == _pid and st.session_state.get("_paper_cache") is not None:
+    paper = st.session_state._paper_cache
+else:
+    paper = get_paper_by_id(_pid)
+    if paper is None:
+        st.session_state.selected_paper_id = None
+        st.session_state.pop("_paper_cache", None)
+        st.session_state.pop("_paper_cache_id", None)
+        st.switch_page("search_page.py")
+    else:
+        st.session_state._paper_cache = paper
+        st.session_state._paper_cache_id = _pid
 
-paper = st.session_state.selected_paper
+if st.button("Back to search"):
+    st.session_state.selected_paper_id = None
+    st.session_state.pop("_paper_cache", None)
+    st.session_state.pop("_paper_cache_id", None)
+    st.rerun()
 
 def paper_pdf_to_markdown():
     paper.download_pdf(filename="paper.pdf")
     paper_as_markdown = pymupdf4llm.to_markdown("paper.pdf")
     return paper_as_markdown
 
-summarizer = load_summarizer()
 def summarize_abstract(length):
+    from utils import load_summarizer
 
+    summarizer = load_summarizer()
     abstract = paper.summary
     abstract_length = len(abstract.split())
 

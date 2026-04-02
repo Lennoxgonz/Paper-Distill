@@ -5,8 +5,8 @@ from arxiv_client import get_paper_by_id
 # Initialize session state
 if 'papers' not in st.session_state:
     st.session_state.papers = None
-if 'selected_paper' not in st.session_state:
-    st.session_state.selected_paper = None
+if 'selected_paper_id' not in st.session_state:
+    st.session_state.selected_paper_id = None
 if 'abstract_summary' not in st.session_state:
     st.session_state.abstract_summary = None
 if 'paper_summary' not in st.session_state:
@@ -27,7 +27,7 @@ def open_reference_paper(arxiv_id: str) -> None:
         st.error("Unable to load the selected reference paper right now.")
         return
 
-    st.session_state.selected_paper = paper
+    st.session_state.selected_paper_id = paper.get_short_id()
     st.switch_page("paper_details_page.py")
 
 # Explanation of the paper search
