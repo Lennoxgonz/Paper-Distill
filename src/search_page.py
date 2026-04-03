@@ -26,18 +26,19 @@ def show_paper_details(paper):
 st.title("Paper Distill")
 st.write("Search for scientific papers and get customized summarization and the ability to ask questions about the paper.")
 
-search_query = st.text_input("Search", placeholder="Enter keywords")
+with st.form("search_form"):
+    search_query = st.text_input("Search", placeholder="Enter keywords")
+    selected_display_names = st.multiselect("Categories", list(categories_dict.values()))
+    submitted = st.form_submit_button("Search")
 
-selected_display_names = st.multiselect("Categories", list(categories_dict.values()))
+if submitted:
+    selected_cats = []
+    for display_name in selected_display_names:
+        for code, name in categories_dict.items():
+            if name == display_name:
+                selected_cats.append(code)
+                break
 
-selected_cats = []
-for display_name in selected_display_names:
-    for code, name in categories_dict.items():
-        if name == display_name:
-            selected_cats.append(code)
-            break
-
-if st.button("Search"):
     with st.spinner("Searching for papers..."):
         try:
             papers = fetch_papers(search_query, selected_cats)

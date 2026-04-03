@@ -2,6 +2,13 @@ import streamlit as st
 import nltk
 from arxiv_client import get_paper_by_id
 
+st.set_page_config(
+    page_title="Paper Distill",
+    page_icon="📄",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
 # Initialize session state
 if 'papers' not in st.session_state:
     st.session_state.papers = None

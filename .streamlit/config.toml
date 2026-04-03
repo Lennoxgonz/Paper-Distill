@@ -1,0 +1,6 @@
+# App-wide Streamlit options only. Theme (light/dark) comes from the user’s
+# Streamlit Settings → Theme (or system preference), not from this file.
+# https://docs.streamlit.io/develop/concepts/configuration
+
+[browser]
+gatherUsageStats = false

@@ -9,6 +9,7 @@ from google.genai import types
 import pymupdf4llm
 from arxiv_client import get_paper_by_id
 from categories import categories_dict
+from paths import ensure_papers_dir
 
 if st.session_state.get("selected_paper_id") is None:
     st.switch_page("search_page.py")
@@ -36,15 +37,12 @@ ASK_QUESTIONS_SYSTEM = (
     "At the end of your response suggest 3 related questions to be asked."
 )
 
-_SRC_DIR = Path(__file__).resolve().parent
-
-
 def _safe_paper_filename_id() -> str:
     return re.sub(r"[^\w.\-]", "_", _pid)
 
 
 def local_pdf_path() -> Path:
-    return _SRC_DIR / f"paper_{_safe_paper_filename_id()}.pdf"
+    return ensure_papers_dir() / f"paper_{_safe_paper_filename_id()}.pdf"
 
 
 def clear_ask_questions_state(*, delete_uploaded_file: bool) -> None:
@@ -122,9 +120,9 @@ if st.button("Back to search"):
 
 
 def paper_pdf_to_markdown():
-    paper.download_pdf(filename="paper.pdf")
-    paper_as_markdown = pymupdf4llm.to_markdown("paper.pdf")
-    return paper_as_markdown
+    path = local_pdf_path()
+    paper.download_pdf(filename=str(path))
+    return pymupdf4llm.to_markdown(str(path))
 
 
 def summarize_abstract(length):
@@ -172,15 +170,12 @@ def summarize_paper(length, complexity):
 
 
 with st.container():
-    # Title
-    st.header(paper.title)
+    st.header(paper.title, anchor=False)
 
-    # Authors section
     authors_text = ", ".join([a.name for a in paper.authors][:3])
     if len(paper.authors) > 3:
         authors_text += " et al."
     st.markdown(f"**Authors:** *{authors_text}*")
-
 
 col1, col2 = st.columns(2)
 with col1:
@@ -189,9 +184,9 @@ with col2:
     display_categories = [categories_dict.get(cat, cat) for cat in paper.categories]
     categories_display = ", ".join(display_categories)
     st.markdown(f"**Categories:** {categories_display}")
-st.markdown(
-    f"**Links:** [PDF]({paper.pdf_url}) | [arXiv]({paper.entry_id})"
-)
+st.caption(f"[PDF]({paper.pdf_url}) · [arXiv]({paper.entry_id})")
+
+st.divider()
 
 tabs = st.tabs(["Abstract", "Abstract Summary", "Paper Summary", "Ask Questions"])
 with tabs[0]:
