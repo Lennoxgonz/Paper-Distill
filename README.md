@@ -133,9 +133,9 @@ Gemini AI architecture excels at processing long-context tasks through specializ
 [Read the Gemini 1.5 paper](https://arxiv.org/abs/2403.05530v5)
 
 ### Ask Questions
-The ask questions feature allows users to ask questions about the paper. This is achieved through the use of Gemini 2.5 Flash-Lite through the Gemini developer API and works in a very similar way to the paper summary feature.
+The ask questions feature is a **multi-turn chat** about the paper using Gemini 2.5 Flash-Lite through the Gemini developer API. The full paper PDF is uploaded once (via the Gemini Files API) on the first message so the model receives **multimodal** input, including figures and layout. Later questions stay in the same conversation so prior answers remain in context.
 
-The paper is downloaded as a pdf, converted to markdown, then passed into the model along with the question to be asked and a prompt instructing the model to answer the question based on the context of the paper.
+The paper summary feature still converts the PDF to markdown for text-only summarization; ask questions uses the PDF directly for richer context.
 
 [Learn more about Gemini models](https://ai.google.dev/gemini-api/docs/models)
 

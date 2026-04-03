@@ -11,6 +11,14 @@ if 'abstract_summary' not in st.session_state:
     st.session_state.abstract_summary = None
 if 'paper_summary' not in st.session_state:
     st.session_state.paper_summary = None
+if 'ask_questions_messages' not in st.session_state:
+    st.session_state.ask_questions_messages = []
+if 'ask_questions_gemini_chat' not in st.session_state:
+    st.session_state.ask_questions_gemini_chat = None
+if 'ask_questions_gemini_file' not in st.session_state:
+    st.session_state.ask_questions_gemini_file = None
+if 'ask_questions_chat_paper_id' not in st.session_state:
+    st.session_state.ask_questions_chat_paper_id = None
 
 # Download nltk data (if needed)
 try:
@@ -67,8 +75,8 @@ with st.sidebar.expander("**Paper Summary**"):
 with st.sidebar.expander("**Ask Questions**"):
     st.markdown(
         """
-        The ask questions feature allows users to ask questions about the paper. This is achieved through the use of `gemini-2.5-flash-lite` through the Gemini developer API and works in a very similar way to the paper summary feature.\n\n
-        The paper is downloaded as a pdf, converted to markdown, then passed into the model along with the question to be asked and a prompt instructing the model to answer the question based on the context of the paper.
+        The ask questions feature is a **multi-turn chat** about the paper using `gemini-2.5-flash-lite` through the Gemini developer API. The full paper PDF is uploaded once (via the Gemini Files API) on the first message so the model can use **multimodal** context, including figures and layout. Follow-up questions stay in the same conversation so earlier answers remain in context.\n\n
+        This differs from the paper summary tab, which still converts the PDF to markdown for text-only summarization.
         """
     )
     st.link_button("Gemini model docs (`gemini-2.5-flash-lite`)", "https://ai.google.dev/gemini-api/docs/models")
